@@ -19,7 +19,7 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
 
 
 if __name__ == '__main__':
-    print_hi('Start Python')
+    print_hi('Start Python !')
 
     app = QApplication(sys.argv)
     autoStockWindow = AutoWindowClass()

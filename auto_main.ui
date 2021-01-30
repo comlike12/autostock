@@ -6,82 +6,309 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>140</height>
+    <width>878</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>자동매매만들기</string>
   </property>
-  <widget class="QLabel" name="inputLabel">
+  <widget class="QGroupBox" name="g_init_info">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>161</width>
-     <height>51</height>
+     <x>0</x>
+     <y>0</y>
+     <width>221</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Agency FB</family>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>문자를 입력하세요 : </string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="charTxtEdit">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>24</y>
-     <width>181</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="documentTitle">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="okBtn">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>20</y>
-     <width>81</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Agency FB</family>
+     <family>Arial</family>
      <pointsize>14</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text">
-    <string>확인</string>
+   <property name="title">
+    <string>기본정보</string>
    </property>
+   <widget class="QLabel" name="l_login_id_txt">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>42</y>
+      <width>101</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_login_id">
+    <property name="geometry">
+     <rect>
+      <x>1</x>
+      <y>44</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>ID : </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_login_nm_txt">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>62</y>
+      <width>81</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_login_nm">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>64</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Name : </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_server_type">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>21</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>접속구분 : </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_server_type_txt">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>91</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_account_cnt_txt">
+    <property name="geometry">
+     <rect>
+      <x>65</x>
+      <y>80</y>
+      <width>121</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="l_account_cnt">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>82</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>계좌수 : </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="b_login_btn">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>80</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>로그인</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QLabel" name="okTxtLabel">
+  <widget class="QGroupBox" name="g_account_info">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>70</y>
-     <width>421</width>
-     <height>41</height>
+     <x>230</x>
+     <y>0</y>
+     <width>161</width>
+     <height>111</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="title">
+    <string>계좌정보</string>
+   </property>
+   <widget class="QListWidget" name="account_list">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>141</width>
+      <height>81</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="l_order_amt_txt">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>30</y>
+     <width>101</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
-    <string>확인을 누르면 여기에 입력한 글이 출력됩니다.</string>
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="l_order_amt">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>11</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;주문가능금액&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
  </widget>

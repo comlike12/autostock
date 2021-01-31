@@ -45,7 +45,7 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
             login_check = self.kiwoom_dynamic_call("GetConnectState()")
             logger.debug("로그인 체크 : " + str(login_check))
             if login_check == 1:
-                logger.debug("이미 로그인 되어진 상태")
+                logger.debug("이미 로그인 상태")
                 QMessageBox.question(self, '확인', '이미 로그인 되었습니다.', QMessageBox.Ok)
             else:
                 logger.debug("로그인 시작")

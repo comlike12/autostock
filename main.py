@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import sys
-import logging
 import const
+from kiwoom_request import *
 from auto_main import *
-from logging.handlers import TimedRotatingFileHandler
 from PyQt5.QtWidgets import *
+from logger_common import *
 from PyQt5.QAxContainer import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -20,27 +20,40 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
         super().__init__()
         self.setupUi(self)
         self.kiwoom = QAxWidget("KHOPENAPI.KHOpenAPICtrl.1")
-
-        # kiwoom tr callback
-        self.kiwoom.OnReceiveTrData.connect(self.kiwoom_OnReceiveTrData)
+        logger.debug("###################start######################")
 
         # login callback
-        self.kiwoom.OnEventConnect.connect(self.kiwoom_login_callback)
+        self.kiwoom.OnEventConnect.connect(self.login_callback)
+        # kiwoom tr callback
+        self.kiwoom.OnReceiveTrData.connect(self.on_receive_tr_data)
+
         # login button click event
         self.b_login_btn.clicked.connect(self.login_button_event)
         # account list click event
         self.account_list.itemClicked.connect(self.account_list_item_clicked)
 
+    def kiwoom_dynamic_call(self, func_name):
+        return self.kiwoom.dynamicCall(func_name)
+
+    def kiwoom_get_user_info(self, name):
+        print(name)
+        return self.kiwoom.dynamicCall("GetLoginInfo(QString)", name)
+
     # login event
     def login_button_event(self):
-        login_check = self.kiwoom.dynamicCall("GetConnectState()")
-        if login_check == 1:
-            QMessageBox.question(self, '확인', '이미 로그인 되었습니다.', QMessageBox.Ok)
-        else:
-            self.kiwoom.dynamicCall("CommConnect()")
+        try:
+            login_check = self.kiwoom_dynamic_call("GetConnectState()")
+            logger.debug("로그인 체크 : " + str(login_check))
+            if login_check == 1:
+                logger.debug("이미 로그인 되어진 상태")
+                QMessageBox.question(self, '확인', '이미 로그인 되었습니다.', QMessageBox.Ok)
+            else:
+                logger.debug("로그인 시작")
+                self.kiwoom_dynamic_call("CommConnect()")
+        except Exception as e:
+            print(e)
 
-    # login event callback function
-    def kiwoom_login_callback(self, n_err_code):
+    def login_callback(self, n_err_code):
         """로그인 결과 수신
             :param n_err_code: 0: 로그인 성공, 100: 사용자 정보교환 실패, 101: 서버접속 실패, 102: 버전처리 실패
             :return:
@@ -52,7 +65,9 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
             "FIREW_SECGB" : 방화벽 설정여부를 반환합니다.(0 : 미설정, 1 : 설정, 2 : 해지)
             "GetServerGubun" : 접속서버 구분을 반환합니다.(1 : 모의투자, 나머지 : 실서버)
         """
+        logger.debug("로그인 요청 콜백 상태 : " + str(n_err_code))
         if n_err_code == 0:
+            logger.debug("로그인 성공 - 로그인 정보 가져오기")
             self.get_login_info()
         elif n_err_code == -100:
             logger.debug("사용자 정보교환 실패")
@@ -63,18 +78,18 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
 
     # get user login info
     def get_login_info(self):
-        self.l_login_id_txt.setText(self.kiwoom.dynamicCall("GetLoginInfo(QString)", "USER_ID"))
-        self.l_login_nm_txt.setText(self.kiwoom.dynamicCall("GetLoginInfo(QString)", "USER_NAME"))
-        self.l_account_cnt_txt.setText(self.kiwoom.dynamicCall("GetLoginInfo(QString)", "ACCOUNT_CNT"))
-        server_type = self.kiwoom.dynamicCall("GetLoginInfo(QString)", "GetServerGubun")
-        if server_type == "1":
-            self.l_server_type_txt.setText("모의투자")
-        else:
-            self.l_server_type_txt.setText("실서버")
-        self.b_login_btn.setText("완료")
-
         try:
-            acc_list = self.kiwoom.dynamicCall("GetLoginInfo(QString)", "ACCLIST")
+            self.l_login_id_txt.setText(self.kiwoom_get_user_info("USER_ID"))
+            self.l_login_nm_txt.setText(self.kiwoom_get_user_info("USER_NAME"))
+            self.l_account_cnt_txt.setText(self.kiwoom_get_user_info("ACCOUNT_CNT"))
+            server_type = self.kiwoom_get_user_info("GetServerGubun")
+            if server_type == "1":
+                self.l_server_type_txt.setText("모의투자")
+            else:
+                self.l_server_type_txt.setText("실서버")
+            self.b_login_btn.setText("완료")
+
+            acc_list = self.kiwoom_get_user_info("ACCLIST")
             print(acc_list.split(";"))
 
             for acc_info in acc_list.split(";"):
@@ -97,7 +112,7 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
                                 view_id_info[const.SEARCH_TYPE],
                                 view_id_info[const.VIEW_ID])
 
-    def kiwoom_OnReceiveTrData(self, sScrNo, sRQName, sTRCode, sRecordName, sPreNext, nDataLength, sErrorCode, sMessage,
+    def on_receive_tr_data(self, sScrNo, sRQName, sTRCode, sRecordName, sPreNext, nDataLength, sErrorCode, sMessage,
                                sSPlmMsg, **kwargs):
         """TR 요청에 대한 결과 수신
         데이터 얻어오기 위해 내부에서 GetCommData() 호출
@@ -124,26 +139,8 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
 
 
 if __name__ == '__main__':
-    # 로그 파일 핸들러
-    fh_log = TimedRotatingFileHandler('C:/logs/log', when='midnight', encoding='utf-8', backupCount=120)
-    fh_log.setLevel(logging.DEBUG)
-
-    # 콘솔 핸들러
-    sh = logging.StreamHandler()
-    sh.setLevel(logging.DEBUG)
-
-    # 로깅 포멧 설정
-    formatter = logging.Formatter('[%(asctime)s][%(levelname)s] %(message)s')
-    fh_log.setFormatter(formatter)
-    sh.setFormatter(formatter)
-
-    # 로거 생성 및 핸들러 등록
-    logger = logging.getLogger(__file__)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(fh_log)
-    logger.addHandler(sh)
-
     app = QApplication(sys.argv)
+    logger = LoggerCommon().get_logger_setting()
     autoStockWindow = AutoWindowClass()
     autoStockWindow.show()
     sys.exit(app.exec_())

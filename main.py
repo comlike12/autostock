@@ -79,6 +79,7 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
     # get user login info
     def get_login_info(self):
         try:
+            logger.debug("로그인 정보 조회")
             self.l_login_id_txt.setText(self.kiwoom_get_user_info("USER_ID"))
             self.l_login_nm_txt.setText(self.kiwoom_get_user_info("USER_NAME"))
             self.l_account_cnt_txt.setText(self.kiwoom_get_user_info("ACCOUNT_CNT"))

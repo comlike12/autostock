@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import const
-from kiwoom_request import *
 from auto_main import *
 from PyQt5.QtWidgets import *
 from logger_common import *
@@ -38,6 +37,17 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
     def kiwoom_get_user_info(self, name):
         print(name)
         return self.kiwoom.dynamicCall("GetLoginInfo(QString)", name)
+
+    def kiwoom_set_input_value(self, sid, value):
+        self.kiwoom.dynamicCall("SetInputValue(QString, QString)", [sid, value])
+
+    def kiwoom_comm_rq_data(self, view_name, tr_id, search_type, view_id):
+        self.kiwoom.dynamicCall('CommRqData(QString, QString, QString, QString)',
+                                [view_name, tr_id, search_type, view_id])
+
+    def kiwoom_get_comm_data(self, tr_id, view_name, search_type, obj_name):
+        return self.kiwoom.dynamicCall("GetCommData(QString, QString, QString, QString)",
+                                       [tr_id, view_name, search_type, obj_name])
 
     # login event
     def login_button_event(self):
@@ -106,15 +116,13 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
         print(self.account_list.currentItem().text())
         view_id_info = view_ids[const.VIEW_DEPOSIT_ID]
         # self.kiwoom.dynamicCall('CommRqData("계좌예수금조회", "opw00001", "0", "화면번호")', "USER_ID")
-        self.kiwoom.dynamicCall("SetInputValue(QString, QString)", ["계좌번호", self.account_list.currentItem().text()])
-        self.kiwoom.dynamicCall('CommRqData(QString, QString, QString, QString)',
-                                view_id_info[const.VIEW_NAME],
-                                view_id_info[const.TR_ID],
-                                view_id_info[const.SEARCH_TYPE],
-                                view_id_info[const.VIEW_ID])
+        # self.kiwoom.dynamicCall("SetInputValue(QString, QString)", ["계좌번호", self.account_list.currentItem().text()])
+        self.kiwoom_set_input_value("계좌번호", self.account_list.currentItem().text())
+        self.kiwoom_comm_rq_data(view_id_info[const.VIEW_NAME], view_id_info[const.TR_ID],
+                                 view_id_info[const.SEARCH_TYPE], view_id_info[const.VIEW_ID])
 
     def on_receive_tr_data(self, sScrNo, sRQName, sTRCode, sRecordName, sPreNext, nDataLength, sErrorCode, sMessage,
-                               sSPlmMsg, **kwargs):
+                           sSPlmMsg, **kwargs):
         """TR 요청에 대한 결과 수신
         데이터 얻어오기 위해 내부에서 GetCommData() 호출
           GetCommData(
@@ -134,9 +142,18 @@ class AutoWindowClass(QMainWindow, Ui_autoMainForm):
         :param kwargs:
         :return:
         """
-        if sRQName == "예수금상세조회":
-            order_amt = int(self.kiwoom.dynamicCall("GetCommData(QString, QString, QString, QString)", [sTRCode, sRQName, 0, "주문가능금액"]))
-            self.l_order_amt_txt.setText(str(order_amt))
+        try:
+            view_id_info = view_ids[sTRCode]
+
+            if const.VIEW_DEPOSIT_ID == sTRCode:  # 예수금상세조회
+                order_amt = self.kiwoom_get_comm_data(sTRCode, sRQName, 0, "주문가능금액")
+                money_amt = self.kiwoom_get_comm_data(sTRCode, sRQName, 0, "예수금")
+                ok_amt = self.kiwoom_get_comm_data(sTRCode, sRQName, 0, "출금가능금액")
+                self.l_order_amt_txt.setText(str(int(order_amt)))
+                self.l_money_amt_txt.setText(str(int(order_amt)))
+                self.l_ok_amt_txt.setText(str(int(order_amt)))
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':

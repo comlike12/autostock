@@ -1,27 +1,36 @@
+# -*- coding: utf-8 -*-
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
 
-class LoggerCommon:
-    def __init__(self):
-        # 로그 파일 핸들러
-        self.fh_log = TimedRotatingFileHandler('C:/logs/log', when='midnight', encoding='utf-8', backupCount=120)
-        self.fh_log.setLevel(logging.DEBUG)
+def createLogger(logger_name):
+    # Create Logger
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.DEBUG)
 
-        # 콘솔 핸들러
-        self.sh = logging.StreamHandler()
-        self.sh.setLevel(logging.DEBUG)
+    # Check handler exists
+    if len(logger.handlers) > 0:
+        return logger  # Logger already exists
 
-        # 로깅 포멧 설정
-        self.formatter = logging.Formatter('[%(asctime)s][%(levelname)s] %(message)s')
-        self.fh_log.setFormatter(self.formatter)
-        self.sh.setFormatter(self.formatter)
+    # 로그 파일 핸들러
+    fh_log = TimedRotatingFileHandler('C:/logs/log', when='midnight', encoding='utf-8', backupCount=120)
+    fh_log.setLevel(logging.DEBUG)
 
-        # 로거 생성 및 핸들러 등록
-        self.logger = logging.getLogger(__file__)
-        self.logger.setLevel(logging.DEBUG)
-        self.logger.addHandler(self.fh_log)
-        self.logger.addHandler(self.sh)
+    # 콘솔 핸들러
+    sh = logging.StreamHandler()
+    sh.setLevel(logging.DEBUG)
 
-    def get_logger_setting(self):
-        return self.logger
+    formatter = logging.Formatter('[%(levelname)s|%(name)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
+    fh_log.setFormatter(formatter)
+    sh.setFormatter(formatter)
+
+    # Create Handlers
+    streamHandler = logging.StreamHandler()
+    streamHandler.setLevel(logging.DEBUG)
+    streamHandler.setFormatter(formatter)
+
+    # logger.addHandler(streamHandler)
+    logger.addHandler(fh_log)
+    logger.addHandler(sh)
+
+    return logger

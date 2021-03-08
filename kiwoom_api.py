@@ -14,10 +14,15 @@ class KiwoomCall:
         self.kiwoom.OnReceiveTrData.connect(self.on_receive_tr_data)
 
         # login callback
-        self.kiwoom.OnEventConnect.connect(self.login_callback)
+        # self.kiwoom.OnEventConnect.connect(self.login_callback)
 
+    # 키움 api 반환
     def get_kiwoom_api(self):
         return self.kiwoom
+
+    # 로그인 콜백 함수 지정
+    def set_login_callback(self, callbackFn):
+        self.kiwoom.OnEventConnect.connect(callbackFn)
 
     def kiwoom_dynamic_call(self, func_name):
         return self.kiwoom.dynamicCall(func_name)

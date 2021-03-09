@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>878</width>
-    <height>512</height>
+    <width>1335</width>
+    <height>817</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>221</width>
-     <height>511</height>
+     <height>321</height>
     </rect>
    </property>
    <property name="font">
@@ -398,6 +398,37 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>0</y>
+     <width>1091</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="title">
+    <string>보유주식</string>
+   </property>
+   <widget class="QTableWidget" name="have_stock_table">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>1071</width>
+      <height>291</height>
+     </rect>
     </property>
    </widget>
   </widget>
